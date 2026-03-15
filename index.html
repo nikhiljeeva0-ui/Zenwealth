@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZenWealth AI — Financial Clarity Score</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:    #0A1628;
+    --navy2:   #0D1F38;
+    --blue:    #2563EB;
+    --lblue:   #93C5FD;
+    --teal:    #0D9488;
+    --lteal:   #CCFBF1;
+    --green:   #16A34A;
+    --lgreen:  #D1FAE5;
+    --trust:   #065F46;
+    --gold:    #D97706;
+    --lgold:   #FEF3C7;
+    --white:   #FFFFFF;
+    --offwhite:#F8FAFC;
+    --lgray:   #F1F5F9;
+    --mgray:   #94A3B8;
+    --dgray:   #334155;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--navy);
+    color: var(--white);
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE TEXTURE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 24px 60px;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(37,99,235,0.18) 0%, transparent 70%);
+    top: -100px; left: 50%;
+    transform: translateX(-50%);
+    pointer-events: none;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(13,148,136,0.12) 0%, transparent 70%);
+    bottom: 0; right: -100px;
+    pointer-events: none;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(37,99,235,0.15);
+    border: 1px solid rgba(37,99,235,0.3);
+    color: var(--lblue);
+    padding: 8px 18px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    margin-bottom: 32px;
+    animation: fadeDown 0.6s ease forwards;
+  }
+
+  .badge span { 
+    width: 7px; height: 7px; 
+    background: var(--teal); 
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.3); }
+  }
+
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(36px, 6vw, 72px);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -1.5px;
+    max-width: 800px;
+    margin-bottom: 24px;
+    animation: fadeUp 0.7s 0.1s ease both;
+  }
+
+  .hero h1 em {
+    font-style: normal;
+    background: linear-gradient(135deg, #2563EB, #0D9488);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero p {
+    font-size: clamp(16px, 2vw, 20px);
+    color: var(--mgray);
+    max-width: 500px;
+    line-height: 1.6;
+    margin-bottom: 40px;
+    animation: fadeUp 0.7s 0.2s ease both;
+  }
+
+  .hero-cta {
+    animation: fadeUp 0.7s 0.3s ease both;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--blue);
+    color: white;
+    padding: 18px 36px;
+    border-radius: 12px;
+    font-size: 17px;
+    font-weight: 600;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+    box-shadow: 0 0 40px rgba(37,99,235,0.3);
+  }
+
+  .btn-primary:hover {
+    background: #1d4ed8;
+    transform: translateY(-2px);
+    box-shadow: 0 0 60px rgba(37,99,235,0.4);
+  }
+
+  .btn-primary svg { width: 20px; height: 20px; }
+
+  .hero-note {
+    margin-top: 16px;
+    font-size: 13px;
+    color: var(--mgray);
+    animation: fadeUp 0.7s 0.4s ease both;
+  }
+
+  /* ── STATS BAR ── */
+  .stats {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0;
+    background: rgba(255,255,255,0.03);
+    border-top: 1px solid rgba(255,255,255,0.06);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    padding: 32px 24px;
+  }
+
+  .stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 48px;
+    border-right: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .stat-item:last-child { border-right: none; }
+
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--white);
+    line-height: 1;
+  }
+
+  .stat-num span { color: var(--teal); }
+
+  .stat-label {
+    font-size: 12px;
+    color: var(--mgray);
+    margin-top: 6px;
+    text-align: center;
+    max-width: 120px;
+    line-height: 1.4;
+  }
+
+  /* ── SECTION BASE ── */
+  section { position: relative; z-index: 1; }
+
+  .section-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 80px 24px;
+  }
+
+  .section-tag {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 16px;
+  }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(28px, 4vw, 44px);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.5px;
+    margin-bottom: 20px;
+  }
+
+  .section-body {
+    font-size: 17px;
+    color: var(--mgray);
+    line-height: 1.7;
+    max-width: 620px;
+  }
+
+  /* ── PROBLEM SECTION ── */
+  .problem { background: var(--offwhite); color: var(--navy); }
+
+  .problem .section-tag { color: var(--blue); }
+  .problem .section-title { color: var(--navy); }
+  .problem .section-body { color: var(--dgray); }
+
+  .pain-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-top: 40px;
+  }
+
+  .pain-card {
+    background: white;
+    border: 1px solid #E2E8F0;
+    border-radius: 16px;
+    padding: 24px;
+    transition: all 0.2s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+
+  .pain-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  }
+
+  .pain-emoji { font-size: 28px; margin-bottom: 12px; display: block; }
+
+  .pain-text {
+    font-size: 15px;
+    color: var(--dgray);
+    line-height: 1.5;
+    font-weight: 500;
+  }
+
+  .pain-bottom {
+    margin-top: 32px;
+    padding: 24px;
+    background: var(--lgray);
+    border-radius: 16px;
+    border-left: 4px solid var(--blue);
+  }
+
+  .pain-bottom p {
+    font-size: 17px;
+    color: var(--navy);
+    font-weight: 500;
+    line-height: 1.6;
+  }
+
+  .pain-bottom strong { color: var(--blue); }
+
+  /* ── SCORE DEMO ── */
+  .score-demo { background: var(--navy2); }
+
+  .score-card {
+    background: var(--navy);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 24px;
+    padding: 40px;
+    max-width: 480px;
+    margin: 40px auto 0;
+    box-shadow: 0 0 60px rgba(0,0,0,0.3);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .score-card::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(220,38,38,0.15) 0%, transparent 70%);
+  }
+
+  .score-label {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--mgray);
+    margin-bottom: 8px;
+  }
+
+  .score-number {
+    font-family: 'Syne', sans-serif;
+    font-size: 80px;
+    font-weight: 800;
+    line-height: 1;
+    color: #EF4444;
+    letter-spacing: -2px;
+  }
+
+  .score-number span {
+    font-size: 32px;
+    color: var(--mgray);
+    font-weight: 400;
+  }
+
+  .score-risk {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(220,38,38,0.15);
+    border: 1px solid rgba(220,38,38,0.3);
+    color: #FCA5A5;
+    padding: 6px 14px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 600;
+    margin: 12px 0 20px;
+  }
+
+  .score-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 20px;
+  }
+
+  
+
+  .score-bar-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--mgray);
+    margin-bottom: 6px;
+  }
+
+  .score-bar-track {
+    height: 6px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 100px;
+    overflow: hidden;
+  }
+
+  .score-bar-fill {
+    height: 100%;
+    border-radius: 100px;
+    background: linear-gradient(90deg, #EF4444, #F97316);
+    animation: barGrow 1s ease forwards;
+    transform-origin: left;
+  }
+
+  @keyframes barGrow {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+  }
+
+  .score-action {
+    margin-top: 24px;
+    padding: 16px;
+    background: rgba(37,99,235,0.1);
+    border: 1px solid rgba(37,99,235,0.2);
+    border-radius: 12px;
+  }
+
+  .score-action-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--lblue);
+    margin-bottom: 6px;
+  }
+
+  .score-action-text {
+    font-size: 14px;
+    color: var(--white);
+    line-height: 1.5;
+  }
+
+  /* ── WHAT YOU GET ── */
+  .features { background: var(--lgray); color: var(--navy); }
+  .features .section-title { color: var(--navy); }
+  .features .section-body { color: var(--dgray); }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+    margin-top: 48px;
+  }
+
+  .feature-card {
+    background: white;
+    border-radius: 20px;
+    padding: 28px;
+    border: 1px solid #E2E8F0;
+    transition: all 0.2s;
+  }
+
+  .feature-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.08);
+  }
+
+  .feature-icon {
+    width: 48px; height: 48px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    margin-bottom: 16px;
+  }
+
+  .feature-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 8px;
+  }
+
+  .feature-desc {
+    font-size: 14px;
+    color: var(--dgray);
+    line-height: 1.6;
+  }
+
+  .feature-tag {
+    display: inline-block;
+    margin-top: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 100px;
+  }
+
+  /* ── TRUST SECTION ── */
+  .trust { background: var(--trust); }
+
+  .trust-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-top: 40px;
+  }
+
+  .trust-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 20px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .trust-icon {
+    font-size: 22px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .trust-text {
+    font-size: 14px;
+    color: var(--lgreen);
+    line-height: 1.5;
+  }
+
+  .trust-text strong {
+    display: block;
+    color: white;
+    font-weight: 600;
+    margin-bottom: 2px;
+    font-size: 15px;
+  }
+
+  .trust-promise {
+    margin-top: 32px;
+    padding: 28px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.15);
+    text-align: center;
+  }
+
+  .trust-promise p {
+    font-family: 'Syne', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: white;
+    line-height: 1.5;
+  }
+
+  .trust-promise span { color: #6EE7B7; }
+
+  /* ── SIGNUP SECTION ── */
+  .signup { background: var(--navy); }
+
+  .signup-box {
+    background: var(--navy2);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 28px;
+    padding: 56px 48px;
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+    box-shadow: 0 0 80px rgba(0,0,0,0.3);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .signup-box::before {
+    content: '';
+    position: absolute;
+    top: -80px; left: 50%;
+    transform: translateX(-50%);
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(37,99,235,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .signup-box h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(24px, 4vw, 36px);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.5px;
+    margin-bottom: 12px;
+  }
+
+  .signup-box p {
+    color: var(--mgray);
+    font-size: 16px;
+    margin-bottom: 36px;
+    line-height: 1.6;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .form-input {
+    width: 100%;
+    padding: 16px 20px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    color: white;
+    font-size: 15px;
+    font-family: 'DM Sans', sans-serif;
+    outline: none;
+    transition: all 0.2s;
+  }
+
+  .form-input::placeholder { color: var(--mgray); }
+
+  .form-input:focus {
+    border-color: var(--blue);
+    background: rgba(37,99,235,0.08);
+    box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
+  }
+
+  .form-select {
+    width: 100%;
+    padding: 16px 20px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    color: white;
+    font-size: 15px;
+    font-family: 'DM Sans', sans-serif;
+    outline: none;
+    transition: all 0.2s;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+
+  .form-select option { background: var(--navy2); color: white; }
+
+  .form-select:focus {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
+  }
+
+  .btn-submit {
+    width: 100%;
+    padding: 18px;
+    background: var(--blue);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 17px;
+    font-weight: 600;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 4px;
+    box-shadow: 0 0 40px rgba(37,99,235,0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .btn-submit:hover {
+    background: #1d4ed8;
+    transform: translateY(-2px);
+    box-shadow: 0 0 60px rgba(37,99,235,0.4);
+  }
+
+  .btn-submit:active { transform: translateY(0); }
+
+  .form-note {
+    font-size: 12px;
+    color: var(--mgray);
+    margin-top: 16px;
+    line-height: 1.5;
+  }
+
+  /* SUCCESS STATE */
+  .success-state {
+    display: none;
+    text-align: center;
+    padding: 20px 0;
+  }
+
+  .success-emoji { font-size: 56px; margin-bottom: 16px; display: block; }
+
+  .success-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: white;
+  }
+
+  .success-text {
+    color: var(--mgray);
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  .success-text strong { color: var(--lblue); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: #060D18;
+    padding: 40px 24px;
+    text-align: center;
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .footer-logo {
+    font-family: 'Syne', sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+    color: white;
+    margin-bottom: 8px;
+  }
+
+  .footer-logo span { color: var(--teal); }
+
+  .footer-text {
+    font-size: 13px;
+    color: var(--mgray);
+    line-height: 1.6;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  .footer-disclaimer {
+    margin-top: 16px;
+    font-size: 11px;
+    color: rgba(148,163,184,0.5);
+    max-width: 600px;
+    margin: 16px auto 0;
+    line-height: 1.6;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── MOBILE ── */
+  @media (max-width: 640px) {
+    .stat-item { padding: 16px 24px; }
+    .signup-box { padding: 36px 24px; }
+    .score-number { font-size: 60px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="badge">
+    <span></span>
+    Now in Early Access — India
+  </div>
+  <h1>Find Out Your<br><em>Financial Clarity Score</em><br>in 3 Minutes</h1>
+  <p>Free tool for young Indians aged 22–30. No bank details needed. Just 5 honest questions about your money situation.</p>
+  <div class="hero-cta">
+    <a href="#signup" class="btn-primary">
+      Get My Free Score
+      <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+    </a>
+  </div>
+  <p class="hero-note">🔒 No bank details &nbsp;·&nbsp; Takes 3 minutes &nbsp;·&nbsp; 100% free</p>
+</section>
+
+<!-- ── STATS ── -->
+<div class="stats">
+  <div class="stat-item reveal">
+    <div class="stat-num">48<span>%</span></div>
+    <div class="stat-label">Gen-Z feel financially insecure right now</div>
+  </div>
+  <div class="stat-item reveal">
+    <div class="stat-num">62<span>%</span></div>
+    <div class="stat-label">Stressed about money 3+ days every week</div>
+  </div>
+  <div class="stat-item reveal">
+    <div class="stat-num">₹0</div>
+    <div class="stat-label">Cost of a personal financial advisor for most young Indians</div>
+  </div>
+</div>
+
+<!-- ── PROBLEM ── -->
+<section class="problem">
+  <div class="section-inner">
+    <span class="section-tag reveal">The Problem</span>
+    <h2 class="section-title reveal">Does this sound familiar?</h2>
+    <p class="section-body reveal">You are not bad with money. You just never got a personalised plan built for your actual situation.</p>
+    <div class="pain-grid">
+      <div class="pain-card reveal">
+        <span class="pain-emoji">💸</span>
+        <div class="pain-text">Salary arrives. Gone before month end. Every single month.</div>
+      </div>
+      <div class="pain-card reveal">
+        <span class="pain-emoji">🧠</span>
+        <div class="pain-text">Constantly stressed about money. Affects sleep, work, everything.</div>
+      </div>
+      <div class="pain-card reveal">
+        <span class="pain-emoji">🎯</span>
+        <div class="pain-text">No idea if you are on the right financial path. Future feels unclear.</div>
+      </div>
+      <div class="pain-card reveal">
+        <span class="pain-emoji">📱</span>
+        <div class="pain-text">Asked ChatGPT for help. Got generic Western advice. Still confused.</div>
+      </div>
+      <div class="pain-card reveal">
+        <span class="pain-emoji">📊</span>
+        <div class="pain-text">Tried budgeting apps. Too complex. Stopped using after 3 days.</div>
+      </div>
+      <div class="pain-card reveal">
+        <span class="pain-emoji">🤷</span>
+        <div class="pain-text">No one to ask. Financial advisors cost ₹5,000/hour. Not an option.</div>
+      </div>
+    </div>
+    <div class="pain-bottom reveal">
+      <p>The problem is not you. <strong>The problem is that nobody built the right tool for young Indians — until now.</strong></p>
+    </div>
+  </div>
+</section>
+
+<!-- ── SCORE DEMO ── -->
+<section class="score-demo">
+  <div class="section-inner" style="text-align:center;">
+    <span class="section-tag reveal">How It Works</span>
+    <h2 class="section-title reveal" style="color:white;">Answer 5 questions.<br>Get your personal score.</h2>
+    <p class="section-body reveal" style="margin: 0 auto 0; color: var(--mgray);">Built specifically for Indian salaries and cities. Bengaluru, Hyderabad, Mumbai, Pune, Chennai. No generic advice.</p>
+    <div class="score-card reveal">
+      <div class="score-label">Your Financial Clarity Score</div>
+      <div class="score-number">58<span> /100</span></div>
+      <div class="score-risk">⚠️ Needs Attention</div>
+      <div class="score-bars">
+        <div class="score-bar-item">
+          <div class="score-bar-label"><span>Spending Control</span><span>High Risk</span></div>
+          <div class="score-bar-track"><div class="score-bar-fill" style="width:78%; background: linear-gradient(90deg,#EF4444,#F97316);"></div></div>
+        </div>
+        <div class="score-bar-item">
+          <div class="score-bar-label"><span>Savings Habit</span><span>Medium Risk</span></div>
+          <div class="score-bar-track"><div class="score-bar-fill" style="width:52%; background: linear-gradient(90deg,#F97316,#EAB308);"></div></div>
+        </div>
+        <div class="score-bar-item">
+          <div class="score-bar-label"><span>Income Clarity</span><span>Improving</span></div>
+          <div class="score-bar-track"><div class="score-bar-fill" style="width:35%; background: linear-gradient(90deg,#EAB308,#22C55E);"></div></div>
+        </div>
+      </div>
+      <div class="score-action">
+        <div class="score-action-label">Your action this week</div>
+        <div class="score-action-text">Find one subscription unused in 30 days and cancel it. Typical saving: ₹200–500/month.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FEATURES ── -->
+<section class="features">
+  <div class="section-inner">
+    <span class="section-tag reveal">What You Get</span>
+    <h2 class="section-title reveal">In 3 minutes you will have:</h2>
+    <p class="section-body reveal">Everything personalised to your exact income, city, and life stage. Not generic. Not Western. Built for you.</p>
+    <div class="features-grid">
+      <div class="feature-card reveal">
+        <div class="feature-icon" style="background:#DBEAFE;">📊</div>
+        <div class="feature-title">Financial Clarity Score</div>
+        <div class="feature-desc">Your personal score from 0–100. Understand exactly where you stand — and what it means for your life right now.</div>
+        <span class="feature-tag" style="background:#DBEAFE; color:#1D4ED8;">Shareable</span>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon" style="background:#CCFBF1;">🌦️</div>
+        <div class="feature-title">Financial Weather Forecast</div>
+        <div class="feature-desc">See what is coming in the next 4 weeks based on your patterns. Know before you feel it — not after.</div>
+        <span class="feature-tag" style="background:#CCFBF1; color:#0D9488;">Unique Feature</span>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon" style="background:#D1FAE5;">⚡</div>
+        <div class="feature-title">One Action Today</div>
+        <div class="feature-desc">Not a lecture. Not 20 tips. One specific action for your exact situation that takes under 10 minutes.</div>
+        <span class="feature-tag" style="background:#D1FAE5; color:#16A34A;">Actionable</span>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon" style="background:#FEF3C7;">📋</div>
+        <div class="feature-title">7-Day Recovery Plan</div>
+        <div class="feature-desc">A personalised week-by-week plan sent to your email. Built for your salary, your city, your goals.</div>
+        <span class="feature-tag" style="background:#FEF3C7; color:#D97706;">Free on Email</span>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon" style="background:#EDE9FE;">🎯</div>
+        <div class="feature-title">India-Specific Advice</div>
+        <div class="feature-desc">₹35K salary in Bengaluru? We know what that means. Advice built for real Indian salaries and real Indian cities.</div>
+        <span class="feature-tag" style="background:#EDE9FE; color:#7C3AED;">Made for India</span>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon" style="background:#FEE2E2;">🤝</div>
+        <div class="feature-title">Judgement-Free</div>
+        <div class="feature-desc">We never tell you what you did wrong. Only what you can do next. Supportive, not scary.</div>
+        <span class="feature-tag" style="background:#FEE2E2; color:#DC2626;">No Shame</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── TRUST ── -->
+<section class="trust">
+  <div class="section-inner">
+    <span class="section-tag reveal" style="color:#6EE7B7;">🔒 Your Privacy Promise</span>
+    <h2 class="section-title reveal" style="color:white;">Your data belongs to you.<br>Always.</h2>
+    <div class="trust-grid">
+      <div class="trust-item reveal">
+        <div class="trust-icon">🏦</div>
+        <div class="trust-text"><strong>No bank details ever</strong>Just salary range and spending estimate. Nothing sensitive.</div>
+      </div>
+      <div class="trust-item reveal">
+        <div class="trust-icon">🚫</div>
+        <div class="trust-text"><strong>We never sell your data</strong>Not to banks, insurers, or anyone. Ever. This is our founding promise.</div>
+      </div>
+      <div class="trust-item reveal">
+        <div class="trust-icon">🗑️</div>
+        <div class="trust-text"><strong>Delete anytime</strong>Remove all your data in one click. No questions asked. No lock-in.</div>
+      </div>
+      <div class="trust-item reveal">
+        <div class="trust-icon">🤖</div>
+        <div class="trust-text"><strong>AI guides, you decide</strong>Every suggestion is educational guidance only — not financial advice.</div>
+      </div>
+    </div>
+    <div class="trust-promise reveal">
+      <p>"Your money. <span>Your data.</span> Your peace of mind."</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── SIGNUP ── -->
+<section class="signup" id="signup">
+  <div class="section-inner">
+    <div class="signup-box">
+      <div id="form-state">
+        <h2>Get Your Free<br>Financial Clarity Score</h2>
+        <p>Join young Indians who are getting clarity about their money — in 3 minutes, for free.</p>
+        <div class="form-group">
+          <input type="text" id="name" class="form-input" placeholder="Your first name" required>
+          <input type="email" id="email" class="form-input" placeholder="Your email address" required>
+          <select id="stage" class="form-select" required>
+            <option value="" disabled selected style="color:#94A3B8;">Your current life stage</option>
+            <option value="student">College Student</option>
+            <option value="fresher">First Job (0–2 years)</option>
+            <option value="professional">Working Professional (2+ years)</option>
+            <option value="freelancer">Freelancer / Self-employed</option>
+          </select>
+          <select id="city" class="form-select" required>
+            <option value="" disabled selected>Your city</option>
+            <option>Bengaluru</option>
+            <option>Hyderabad</option>
+            <option>Mumbai</option>
+            <option>Pune</option>
+            <option>Chennai</option>
+            <option>Delhi / NCR</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <button class="btn-submit" onclick="handleSubmit()">
+          Get My Free Clarity Score
+          <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+        </button>
+        <p class="form-note">🔒 No bank details needed &nbsp;·&nbsp; Free forever &nbsp;·&nbsp; Unsubscribe anytime</p>
+      </div>
+      <div class="success-state" id="success-state">
+        <span class="success-emoji">🎉</span>
+        <div class="success-title">You are on the list!</div>
+        <p class="success-text">
+          Check your email in <strong>24 hours</strong>.<br>
+          Your Financial Clarity Score + personalised 7-day plan will be waiting.<br><br>
+          While you wait — share this with one friend who also stresses about money. They will thank you. 🙏
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-logo">Zen<span>Wealth</span> AI</div>
+  <p class="footer-text">Built for young India. Privacy-first. Judgement-free.</p>
+  <p class="footer-disclaimer">
+    ZenWealth AI provides educational guidance only. This is not financial advice, investment advice, or therapy. 
+    Always consult a qualified professional for major financial decisions. © 2026 ZenWealth AI — Early Access.
+  </p>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Form submit
+  function handleSubmit() {
+    const name  = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const stage = document.getElementById('stage').value;
+    const city  = document.getElementById('city').value;
+
+    if (!name || !email || !stage || !city) {
+      alert('Please fill in all fields to get your score!');
+      return;
+    }
+
+    if (!email.includes('@') || !email.includes('.')) {
+      alert('Please enter a valid email address.');
+      return;
+    }
+
+    // Hide form, show success
+    document.getElementById('form-state').style.display = 'none';
+    document.getElementById('success-state').style.display = 'block';
+
+    // Log to console (replace with your backend/email service later)
+    console.log('New signup:', { name, email, stage, city });
+  }
+
+  // Allow Enter key
+  document.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') handleSubmit();
+  });
+</script>
+</body>
+</html>
